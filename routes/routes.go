@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"server/controllers"
+
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 )
@@ -11,6 +13,8 @@ func SetupRoutes(router *gin.Engine, client *mongo.Client) {
 		c.String(200, "Hello, Movie API is running!")
 	})
 
-	// Add more routing logic here similar to MagicStream
-	// Need to create controllers for these in the future
+	// Movie routes
+	router.GET("/movies", controllers.GetMovies(client))
+	router.GET("/movie/:imdb_id", controllers.GetMovie(client))
+	router.POST("/movie", controllers.AddMovie(client))
 }
