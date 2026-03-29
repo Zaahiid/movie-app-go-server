@@ -17,4 +17,10 @@ func SetupRoutes(router *gin.Engine, client *mongo.Client) {
 	router.GET("/movies", controllers.GetMovies(client))
 	router.GET("/movie/:imdb_id", controllers.GetMovie(client))
 	router.POST("/movie", controllers.AddMovie(client))
+
+	// User authentication routes
+	router.POST("/register", controllers.RegisterUser(client))
+	router.POST("/login", controllers.LoginUser(client))
+	router.POST("/logout", controllers.LogoutHandler(client))
+	router.POST("/refresh", controllers.RefreshTokenHandler(client))
 }
