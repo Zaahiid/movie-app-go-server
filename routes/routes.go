@@ -2,6 +2,7 @@ package routes
 
 import (
 	"server/controllers"
+	"server/middleware"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/v2/mongo"
@@ -13,10 +14,18 @@ func SetupRoutes(router *gin.Engine, client *mongo.Client) {
 		c.String(200, "Hello, Movie API is running!")
 	})
 
-	// Movie routes
+	// Public routes
 	router.GET("/movies", controllers.GetMovies(client))
-	router.GET("/movie/:imdb_id", controllers.GetMovie(client))
-	router.POST("/movie", controllers.AddMovie(client))
+	router.GET("/genres", controllers.GetGenres(client))
+
+	// Protected routes
+	protected := router.Group("/")
+	protected.Use(middleware.AuthMiddleWare())
+	{
+		protected.GET("/movie/:imdb_id", controllers.GetMovie(client))
+		protected.POST("/movie", controllers.AddMovie(client))
+		protected.GET("/recommendedmovies", controllers.GetRecommendedMovies(client))
+	}
 
 	// User authentication routes
 	router.POST("/register", controllers.RegisterUser(client))
