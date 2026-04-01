@@ -25,6 +25,7 @@ func SetupRoutes(router *gin.Engine, client *mongo.Client) {
 		protected.GET("/movie/:imdb_id", controllers.GetMovie(client))
 		protected.POST("/movie", controllers.AddMovie(client))
 		protected.GET("/recommendedmovies", controllers.GetRecommendedMovies(client))
+		protected.PATCH("/updatereview/:imdb_id", controllers.AdminReviewUpdate(client))
 	}
 
 	// User authentication routes
